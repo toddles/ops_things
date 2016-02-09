@@ -1,0 +1,10 @@
+---
+- name: install toddles repositories and ops dependencies
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Checkout from git
+#      become_user: toddm
+#      become_method: sudo
+      git: repo=git@github.com:toddles/ops_things.git dest=~/src/ops_things accept_hostkey=true
+

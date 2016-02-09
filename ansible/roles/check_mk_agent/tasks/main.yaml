@@ -1,0 +1,21 @@
+- name: install packages
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items:
+    - xinetd
+
+- name: Install check_mk agent
+  apt: deb="~/src/ops_things/check-mk-agent_1.2.6p2-1_all.deb"
+  become_user: root
+  become_method: sudo
+
+- name: Create plugin directory
+  file: path=/usr/lib/check_mk_agent/plugins/14400 state=directory mode=0755
+
+- name: Create symbolic link to plugin script
+  file: src="~/src/ops_things/scripts/check_mk/apt" dest=/usr/lib/check_mk_agent/plugins/14400/apt state=link
+
+- name: Restart ixinetd service
+  service: name=xinetd state=restarted
+
