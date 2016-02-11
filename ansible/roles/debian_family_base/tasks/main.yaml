@@ -1,0 +1,53 @@
+- name: install packages
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items:
+    - xinetd
+    - htop
+    - python3
+    - python3-pip
+
+- name: register Debian package repository
+  apt_repository: repo='deb http://ftp.us.debian.org/debian/ testing main'
+  when: ansible_distribution == 'Debian'
+
+#- name: register Ubuntu package repository
+#  apt_repository: repo='deb  http://us.archive.ubuntu.com/ubuntu/ wily main'
+#  when: ansible_distribution == 'Ubuntu'
+
+- name: install Debian packages from testing
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    default_release: testing
+  with_items:
+    - check-mk-agent
+  when: ansible_distribution == 'Debian'
+
+- name: install Ubuntu packages
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+#    default_release: wily
+  with_items:
+    - check-mk-agent
+  when: ansible_distribution == 'Ubuntu'
+
+#- name: Install check_mk agent
+#  apt: deb="/tmp/check-mk-agent_1.2.6p2-1_all.deb"
+
+- name: Create plugin directory
+  file: path=/usr/lib/check_mk_agent/plugins/14400 state=directory mode=0755
+
+- name: Create symbolic link to plugin script for non-spork hosts
+  file: src="/home/toddm/src/ops_things/scripts/check_mk/apt" dest=/usr/lib/check_mk_agent/plugins/14400/apt state=link
+  when: ansible_hostname != "spork"
+
+- name: Create symbolic link to plugin script for spork
+  file: src="/home/t/toddm/src/ops_things/scripts/check_mk/apt" dest=/usr/lib/check_mk_agent/plugins/14400/apt state=link
+  when: ansible_hostname == "spork"
+
+- name: Restart ixinetd service
+  service: name=xinetd state=restarted
+

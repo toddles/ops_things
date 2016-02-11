@@ -1,0 +1,4 @@
+- name: upgrade packages
+  apt:
+    update_cache: yes
+    upgrade: full

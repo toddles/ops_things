@@ -1,0 +1,31 @@
+---
+- name: install esx-guest related tools and packages for Debian
+  hosts: all
+  become: yes
+  become_method: sudo
+  become_user: root
+  tasks:
+    - name: install the packages...
+      apt:
+        pkg: "{{ item }}"
+        state: latest
+      with_items:
+        - open-vm-tools
+      when: ansible_distribution == 'Debian'
+
+- name: install esx-guest related tools and packages for Ubuntu
+  hosts: all
+  become: yes
+  become_method: sudo
+  become_user: root
+  tasks:
+    - name: install the packages...
+      apt:
+        pkg: "{{ item }}"
+        state: latest
+      with_items:
+        - open-vm-tools-lts-trusty
+      when: ansible_distribution == 'Ubuntu'
+
+
+

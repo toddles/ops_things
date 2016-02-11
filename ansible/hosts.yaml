@@ -1,1 +1,10 @@
 mail.toddles.com
+spitoon.corp.toddles.com
+splunge.corp.toddles.com
+docker.corp.toddles.com
+#localhost
+
+[esx_guests]
+splunge.corp.toddles.com
+spark.corp.toddles.com
+docker.corp.toddles.com

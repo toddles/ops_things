@@ -1,5 +1,19 @@
 ---
-- name: install toddles repositories and ops dependencies
+- name: install base packages
+  hosts: all
+  become: yes
+  become_method: sudo
+  become_user: root
+  tasks:
+    - name: install the packages...
+      apt:
+        pkg: "{{ item }}"
+        state: latest
+      with_items:
+        - xinetd
+        - git
+
+- name: install toddles repositories 
   hosts: all
   gather_facts: true
   tasks:
@@ -7,9 +21,16 @@
 #      become_user: toddm
 #      become_method: sudo
       git: repo=git@github.com:toddles/ops_things.git dest=~/src/ops_things accept_hostkey=true
-    roles:
+
+- name: install ops dependencies and agents
+  hosts: all
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  roles:
 #    - ssh
 #    - operations
-    - check_mk_agent
+    - debian_family_base
 
 
