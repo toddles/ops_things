@@ -22,7 +22,7 @@
 
 - name: add VMWare repository keys for Ubuntu
   apt_key: data="/home/toddm/src/ops_things/keys/*"
-  when: ansible_distribtuion == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu'
   
 - name: install Debian packages from testing
   apt:
